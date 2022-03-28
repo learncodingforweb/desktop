@@ -33,7 +33,7 @@ jobs:
       - name: release app
         uses: actions/upload-artifact@v3
         with:
-          name: dekstop
+          name: windows
           path: backend/dist/
 
   build_linux:
@@ -64,5 +64,5 @@ jobs:
       - name: release app
         uses: actions/upload-artifact@v3
         with:
-          name: dekstop
+          name: linux
           path: backend/dist/
