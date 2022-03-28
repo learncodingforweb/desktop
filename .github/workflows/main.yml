@@ -33,7 +33,7 @@ jobs:
       - name: release app
         uses: actions/upload-artifact@v3
         with:
-          name: windows
+          name: windows-${{ github.run_number}}
           path: backend/dist/
 
   build_linux:
@@ -64,5 +64,5 @@ jobs:
       - name: release app
         uses: actions/upload-artifact@v3
         with:
-          name: linux
+          name: linux-${{ github.run_number}}
           path: backend/dist/
