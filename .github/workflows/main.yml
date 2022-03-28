@@ -1,0 +1,37 @@
+name: Desktop App Build
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: installing front dependencies
+        run: |
+          cd frontend
+          yarn install
+          yarn build
+          
+      - name: installing backend dependencies
+        run: |
+          cd backend
+          yarn install
+          cd ..
+          cp -R frontend/build backend
+          
+      
+      - name: prepare for desktop app
+        run: |
+          cd backend
+          yarn build-linux
+      
+      - name: release app
+        uses: actions/upload-artifact@v3
+        with:
+          name: dekstop
+          path: backend/dist/
