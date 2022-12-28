@@ -1,9 +1,8 @@
-import React, { FC } from "react";
+import { FC } from "react";
 
 const App:FC=()=>{
   return(
-    <div> Home Page
-    </div>
+    <div>Home Page</div>
   )
 }
 
