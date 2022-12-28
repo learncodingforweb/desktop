@@ -2,36 +2,37 @@ name: Desktop App Build
 
 on:
   push:
-    branches: 
+    branches:
       - main
 
 jobs:
   build_windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
-      
+      - uses: actions/checkout@v3.2.0
+      - uses: actions/setup-node@v3.5.1
+        with:
+          node-version: 16.17.1
       - name: installing front dependencies
         run: |
           cd frontend
           yarn install
           yarn build
-          
+
       - name: installing backend dependencies
         run: |
           cd backend
           yarn install
           cd ..
           move frontend/build backend
-          
-      
+
       - name: prepare for desktop app
         run: |
           cd backend
           yarn build-win64
-      
+
       - name: release app
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: windows-${{ github.run_number}}
           path: backend/dist/
@@ -40,29 +41,30 @@ jobs:
     needs: [build_windows]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
+      - uses: actions/checkout@v3.2.0
+      - uses: actions/setup-node@v3.5.1
+        with:
+          node-version: 16.17.1
       - name: installing front dependencies
         run: |
           cd frontend
           yarn install
           yarn build
-          
+
       - name: installing backend dependencies
         run: |
           cd backend
           yarn install
           cd ..
           cp -R frontend/build backend
-          
-      
+
       - name: prepare for desktop app
         run: |
           cd backend
           yarn build-linux
-      
+
       - name: release app
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: linux-${{ github.run_number}}
           path: backend/dist/
