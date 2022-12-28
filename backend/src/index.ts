@@ -1,27 +1,39 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
+import isDev from 'electron-is-dev';
+
+let mainWindow:BrowserWindow;
 
 function createWindow() {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
-    width: 800,
-  });
+    mainWindow = new BrowserWindow({
+        height: 600,
+        webPreferences: {
+        preload: path.join(__dirname, "preload.js"),
+        },
+        width: 800,
+        show: false
+    });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, "..", "build", "index.html"));
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+    if(isDev){
+        mainWindow.loadURL("http://localhost:3000")
+        mainWindow.on("ready-to-show", ()=>{
+        mainWindow.show();
+        mainWindow.webContents.openDevTools();
+        })
+    }else{
+        mainWindow.loadFile(path.join(__dirname, "../build/index.html"));
+        mainWindow.on("ready-to-show", ()=>{
+            mainWindow.show();
+            mainWindow.webContents.openDevTools();
+        })
+    }
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", () => {
+app.whenReady().then(() => {
   createWindow();
 
   app.on("activate", function () {
